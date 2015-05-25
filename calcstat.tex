@@ -3,11 +3,12 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
+% \usepackage{textcomp}
 % \usepackage{graphicx}
 % \usepackage{lmodern}
 % \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
-\title{The Calculus of Statistics%: Continuous Probability Distributions
-}
+\title{The Calculus of Statistics}
 \author{Blaise Whitesell \and Jeremiah Gelb}
 \date{\today}
 \begin{document}
@@ -15,63 +16,76 @@
 \newcommand{\bdef}[1]{\textbf{#1}} % Bold definitions
 \newcommand{\dx}{\:\mathrm{d}x} % Integral dx
 \newcommand{\dt}{\:\mathrm{d}t} % Integral dt
-\newcommand{\eqnsc}{\text{ ; \quad}} % Separating equations
+\newcommand{\dth}{\:\mathrm{d}\theta} % Integral dtheta
+\newtheorem{problem}{Problem}
 % End hack commands
 \maketitle
 \section{Probability Distribution Functions}
 \subsection{Probability Density Functions}
-A probability density function (\bdef{PDF}) describes the relative likelihood $f(x)$ of possible outcomes for a continuous random variable.
+A probability density function (\bdef{PDF}) describes
+the relative likelihood $f(x)$ of possible outcomes
+for a continuous random variable.
 \begin{itemize}
-\item The probability of any $x$ occurring is either positive or zero, so a PDF can never be negative.
+\item The probability of any $x$ occurring is either positive or zero,
+so a PDF can never be negative.
 \begin{equation*}
-f(x) \geq 0 \text{ for all }x
+f(x) \geq 0 \quad \text{for all }x
 \end{equation*}
 \item The area under the curve must equal 1
 \begin{equation*}
 \int_a^b f(x)\dx = 1
 \end{equation*}
-where $a$ and $b$ are the lower and upper bounds, often $-\infty$ and $\infty$.
+where $a$ and $b$ are the lower and upper bounds,
+often $-\infty$ and $\infty$.
 \end{itemize}
 \subsection{Cumulative Distribution Functions}
-A cumulative distribution function (\bdef{CDF}) gives the probability $F(x)$ that the outcome of a continuous random variable will be less than or equal to $x$.
+A cumulative distribution function (\bdef{CDF}) gives
+the probability $F(x)$ that the outcome of a
+continuous random variable will be less than or equal to $x$.
 \begin{itemize}
-\item The CDF is related to the PDF by this integral
+\item The CDF is related to the PDF by this integral:
 \begin{equation*}
-F(x) = \int_a^x f(t) \dt \eqnsc a \leq x \leq b
+F(x) = \int_a^x f(t) \dt \quad \text{for } a \leq x \leq b
 \end{equation*}
 % where $F(x)$ is the CDF and $f(x)$ is the PDF.
-\item A CDF is monotonically increasing on the interval ($a$,$b$).
+\item A CDF is monotonically increasing on the interval $(a,b)$.
 \begin{equation*}
-F(a) = 0 \eqnsc F(b) = 1
+F(a) = 0 \qquad F(b) = 1
 \end{equation*}
 \end{itemize}
 \subsection{Using Calculus}
-To find the probability of an outcome in a certain range, one can integrate the PDF over that interval ($c$,$d$).
+To find the probability of an outcome in a certain range,
+one can integrate the PDF over that interval
+$(c,d)$ contained in $(a,b)$.
 \begin{equation*}
-\int_c^d f(x) \dx
+\int_c^d f(x) \dx \quad = F(d) - F(c)
 \end{equation*}
 This gives the area under the curve, corresponding to the probability.
-\section{The Uniform Density Function}
+\section{The Uniform Distribution}
 \subsection{Definition}
-A uniform density function describes a continuous random variable where every outcome on an interval ($a$,$b$) is equally likely.
+A uniform distribution describes a continuous random variable
+where every outcome on an interval $(a,b)$ is equally likely.
 \begin{equation*}
 f(x) = \kappa
 \end{equation*}
 \subsection{Implications}
 \begin{itemize}
-\item The function looks like a rectangle with length $b-a$ and height $\kappa$
-\item Area $= 1 = (b-a)*\kappa$
+\item The distribution looks like a rectangle
+with length $b-a$ and height $\kappa$
+\item Area $= 1 = \kappa (b-a)$
 % Gratuitous calculus follows:
 \begin{equation*}
-\int_a^b \frac{1}{b-a} \dx = \frac{x}{b-a}\bigg|_a^b = \frac{b}{b-a} - \frac{a}{b-a} = \frac{b-a}{b-a} = 1
+\int_a^b \frac{1}{b-a} \dx = \frac{x}{b-a}\bigg|_a^b
+= \frac{b}{b-a} - \frac{a}{b-a} = \frac{b-a}{b-a} = 1
 \end{equation*}
 \item Therefore, we have an explicit definition for $\kappa$:
 \begin{equation*}
 \kappa = \frac{1}{b-a}
 \end{equation*}
 \end{itemize}
-\subsection{Equation of a uniform density function}
-The formal equation is piecewise. It depends only on the bounds $a$ and $b$.
+\subsection{PDF of a uniform distribution}
+The formal equation is piecewise.
+It depends only on the bounds $a$ and $b$.
 \begin{equation*}
 f(x)=
 \begin{cases}
@@ -80,11 +94,32 @@ f(x)=
 0 & \text{if } x > b.
 \end{cases}
 \end{equation*}
-
-
-
-
-
+\subsection{CDF of a uniform distribution}
+The CDF increases linearly on the interval $(a,b)$.
+\begin{equation*}
+f(x)=
+\begin{cases}
+0 & \text{if } x < a,\\
+(x-a)/(b-a) & \text{if } a \leq x \leq b,\\
+1 & \text{if } x > b.
+\end{cases}
+\end{equation*}
+\begin{problem}[Spin to Win]
+What is the probability of losing on the first spin?
+\begin{proof}[Solution]
+There are 200 spaces,
+exactly one of which corresponds to losing immediately.
+The range of values can be modeled as a uniform distribution from 0$^\circ$ to 360$^\circ$.
+\begin{equation*}
+1/200 \times 360^\circ = 1.8^\circ
+\end{equation*}
+\begin{equation}
+\int_0^{1.8} \frac{1}{360} \dth
+= \frac{\theta}{360} \bigg|_0^{1.8}  = \frac{1.8}{360} - \frac{0}{360} = 0.005
+\end{equation}
+Interestingly enough, this is equivalent to $1/200$.
+\end{proof}
+\end{problem}
 
 
 \end{document}
