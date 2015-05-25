@@ -14,6 +14,8 @@
 % Begin hack commands
 \newcommand{\bdef}[1]{\textbf{#1}} % Bold definitions
 \newcommand{\dx}{\:\mathrm{d}x} % Integral dx
+\newcommand{\dt}{\:\mathrm{d}t} % Integral dt
+\newcommand{\eqnsc}{\text{ ; \quad}} % Separating equations
 % End hack commands
 \maketitle
 \section{Probability Distribution Functions}
@@ -33,13 +35,22 @@ where $a$ and $b$ are the lower and upper bounds, often $-\infty$ and $\infty$.
 \subsection{Cumulative Distribution Functions}
 A cumulative distribution function (\bdef{CDF}) gives the probability $F(x)$ that the outcome of a continuous random variable will be less than or equal to $x$.
 \begin{itemize}
+\item The CDF is related to the PDF by this integral
+\begin{equation*}
+F(x) = \int_a^x f(t) \dt \eqnsc a \leq x \leq b
+\end{equation*}
+% where $F(x)$ is the CDF and $f(x)$ is the PDF.
 \item A CDF is monotonically increasing on the interval ($a$,$b$).
 \begin{equation*}
-F(a) = 0 \text{ ; \quad}F(b) = 1
+F(a) = 0 \eqnsc F(b) = 1
 \end{equation*}
 \end{itemize}
-\subsection{Calculus (placeholder)}
-%integral of pdf gives cdf
+\subsection{Using Calculus}
+To find the probability of an outcome in a certain range, one can integrate the PDF over that interval ($c$,$d$).
+\begin{equation*}
+\int_c^d f(x) \dx
+\end{equation*}
+This gives the area under the curve, corresponding to the probability.
 \section{The Uniform Density Function}
 \subsection{Definition}
 A uniform density function describes a continuous random variable where every outcome on an interval ($a$,$b$) is equally likely.
@@ -48,8 +59,12 @@ f(x) = \kappa
 \end{equation*}
 \subsection{Implications}
 \begin{itemize}
-\item The function looks like a rectangle with length $(b-a)$ and height $\kappa$
+\item The function looks like a rectangle with length $b-a$ and height $\kappa$
 \item Area $= 1 = (b-a)*\kappa$
+% Gratuitous calculus follows:
+\begin{equation*}
+\int_a^b \frac{1}{b-a} \dx = \frac{x}{b-a}\bigg|_a^b = \frac{b}{b-a} - \frac{a}{b-a} = \frac{b-a}{b-a} = 1
+\end{equation*}
 \item Therefore, we have an explicit definition for $\kappa$:
 \begin{equation*}
 \kappa = \frac{1}{b-a}
@@ -61,7 +76,7 @@ The formal equation is piecewise. It depends only on the bounds $a$ and $b$.
 f(x)=
 \begin{cases}
 0 & \text{if } x < a,\\
-\frac{1}{b-a} & \text{if } a \leq x \leq b,\\
+1/(b-a) & \text{if } a \leq x \leq b,\\
 0 & \text{if } x > b.
 \end{cases}
 \end{equation*}
