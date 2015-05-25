@@ -7,8 +7,8 @@
 % \usepackage{textcomp}
 % \usepackage{graphicx}
 % \usepackage{lmodern}
-% \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
-\title{The Calculus of Statistics}
+\usepackage[left=4cm,right=4cm,top=4cm,bottom=4cm]{geometry}
+\title{\Huge{The Calculus of Statistics}}
 \author{Blaise Whitesell \and Jeremiah Gelb}
 \date{\today}
 \begin{document}
@@ -17,9 +17,10 @@
 \newcommand{\dx}{\:\mathrm{d}x} % Integral dx
 \newcommand{\dt}{\:\mathrm{d}t} % Integral dt
 \newcommand{\dth}{\:\mathrm{d}\theta} % Integral dtheta
-\newtheorem{problem}{Problem}
+\theoremstyle{remark} \newtheorem{problem}{Problem}
 % End hack commands
 \maketitle
+\vspace{2 em}
 \section{Probability Distribution Functions}
 \subsection{Probability Density Functions}
 A probability density function (\bdef{PDF}) describes
@@ -104,22 +105,26 @@ f(x)=
 1 & \text{if } x > b.
 \end{cases}
 \end{equation*}
-\begin{problem}[Spin to Win]
+\hrule
+\begin{problem}
 What is the probability of losing on the first spin?
 \begin{proof}[Solution]
 There are 200 spaces,
 exactly one of which corresponds to losing immediately.
-The range of values can be modeled as a uniform distribution from 0$^\circ$ to 360$^\circ$.
+The continuous range of values can be modeled as
+a uniform distribution from 0$^\circ$ to 360$^\circ$.
 \begin{equation*}
 1/200 \times 360^\circ = 1.8^\circ
 \end{equation*}
 \begin{equation}
 \int_0^{1.8} \frac{1}{360} \dth
-= \frac{\theta}{360} \bigg|_0^{1.8}  = \frac{1.8}{360} - \frac{0}{360} = 0.005
+= \frac{\theta}{360} \bigg|_0^{1.8} 
+= \frac{1.8}{360} - \frac{0}{360} = 0.005
 \end{equation}
 Interestingly enough, this is equivalent to $1/200$.
 \end{proof}
 \end{problem}
+\hrule
 
 
 \end{document}
