@@ -38,6 +38,38 @@ A cumulative distribution function (\bdef{CDF}) gives the probability $F(x)$ tha
 F(a) = 0 \text{ ; \quad}F(b) = 1
 \end{equation*}
 \end{itemize}
+\subsection{Calculus (placeholder)}
+%integral of pdf gives cdf
+\section{The Uniform Density Function}
+\subsection{Definition}
+A uniform density function describes a continuous random variable where every outcome on an interval ($a$,$b$) is equally likely.
+\begin{equation*}
+f(x) = \kappa
+\end{equation*}
+\subsection{Implications}
+\begin{itemize}
+\item The function looks like a rectangle with length $(b-a)$ and height $\kappa$
+\item Area $= 1 = (b-a)*\kappa$
+\item Therefore, we have an explicit definition for $\kappa$:
+\begin{equation*}
+\kappa = \frac{1}{b-a}
+\end{equation*}
+\end{itemize}
+\subsection{Equation of a uniform density function}
+The formal equation is piecewise. It depends only on the bounds $a$ and $b$.
+\begin{equation*}
+f(x)=
+\begin{cases}
+0 & \text{if } x < a,\\
+\frac{1}{b-a} & \text{if } a \leq x \leq b,\\
+0 & \text{if } x > b.
+\end{cases}
+\end{equation*}
+
+
+
+
+
 
 
 \end{document}
