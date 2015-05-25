@@ -1,16 +1,31 @@
 \documentclass[11pt,leqno,letterpaper]{article}
+% Final Project for AP Statistics
+% Ideas by Jeremiah Gelb
+% LaTeX typesetting by Blaise Whitesell
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{mdframed}
 % \usepackage{textcomp}
 % \usepackage{graphicx}
 % \usepackage{lmodern}
 \usepackage[left=4cm,right=4cm,top=4cm,bottom=4cm]{geometry}
+% Packages loaded
 \title{\Huge{The Calculus of Statistics}}
 \author{\Large{Blaise Whitesell} \and \Large{Jeremiah Gelb}}
 % \date{\today}
+% Header/footer config
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\lfoot{}
+\cfoot{}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+% End header/footer config
 \begin{document}
 % Begin hack commands
 \newcommand{\bdef}[1]{\textbf{#1}} % Bold definitions
@@ -19,10 +34,11 @@
 \newcommand{\dth}{\:\mathrm{d}\theta} % Integral dtheta
 \newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}} % d/dt
 \theoremstyle{definition} \newtheorem{problem}{Problem}
-\newcommand{\psep}{\hrule \vspace{1 ex}} % Separator line for problems
+\newcommand{\psep}{\hrule } % Separator line for problems
 \newcommand{\AM}{\textsc{am}}
 % End hack commands
 \maketitle
+\thispagestyle{fancy}
 \vspace{2 em}
 \section{Probability Distribution Functions}
 \subsection{Probability Density Functions}
@@ -33,7 +49,7 @@ for a continuous random variable.
 \item The probability of any $x$ occurring is either positive or zero,
 so a PDF can never be negative.
 \[
-f(x) \geq 0 \quad \text{for all }x
+f(x) \geq 0 \quad \text{for all }x.
 \]
 \item The area under the curve must equal 1
 \[
@@ -49,7 +65,7 @@ continuous random variable will be less than or equal to $x$.
 \begin{itemize}
 \item The CDF is related to the PDF by this integral:
 \[
-F(x) = \int_a^x f(t) \dt \quad \text{for } a \leq x \leq b
+F(x) = \int_a^x f(t) \dt \quad \text{for } a \leq x \leq b.
 \]
 % where $F(x)$ is the CDF and $f(x)$ is the PDF.
 \item A CDF is monotonically increasing on the interval $(a,b)$.
@@ -65,6 +81,7 @@ $(c,d)$ contained in $(a,b)$.
 \int_c^d f(x) \dx \quad = F(d) - F(c)
 \]
 This gives the area under the curve, corresponding to the probability.
+
 \section{The Uniform Distribution}
 \subsection{Definition}
 A uniform distribution describes a continuous random variable
@@ -87,28 +104,26 @@ with length $b-a$ and height $\kappa$
 \kappa = \frac{1}{b-a}
 \]
 \end{itemize}
-\subsection{PDF of a uniform distribution}
-The formal equation is piecewise.
-It depends only on the bounds $a$ and $b$.
-\[
-f(x)=
+\subsection{General form}
+The uniform distribution has two parameters: the bounds $a$ and $b$.
+\begin{align*}
+\tag{PDF}
+f(x)&=
 \begin{cases}
-0 & \text{if } x < a,\\
-1/(b-a) & \text{if } a \leq x \leq b,\\
-0 & \text{if } x > b.
+\frac{1}{b-a} & \text{for } a \leq x \leq b,\\
+0 & \text{otherwise}.
+\end{cases} \\
+\tag{CDF}
+F(x)&=
+\begin{cases}
+0 & \text{for } x < a,\\
+\frac{x-a}{b-a} & \text{for } a \leq x < b,\\
+1 & \text{for } x \geq b.
 \end{cases}
-\]
-\subsection{CDF of a uniform distribution}
+\end{align*}
 The CDF increases linearly on the interval $(a,b)$.
-\[
-f(x)=
-\begin{cases}
-0 & \text{if } x < a,\\
-(x-a)/(b-a) & \text{if } a \leq x \leq b,\\
-1 & \text{if } x > b.
-\end{cases}
-\]
-\psep
+
+\begin{mdframed}
 \begin{problem}
 In the game ``Spin to Win'', the player spins a giant roulette wheel
 with 200 spaces. One is marked ``Win'', one is marked ``Lose'',
@@ -130,20 +145,22 @@ a uniform distribution from 0$^\circ$ to 360$^\circ$.
 Interestingly enough, this is equivalent to $1/200$.
 \end{proof}
 \end{problem}
-\psep
+\end{mdframed}
+
 \section{The Exponential Distribution}
 \subsection{Introduction}
 An exponential distribution can be used to model events that occur
-independently at a constant average rate.\\
-\psep
+independently at a constant average rate.
+
+\begin{mdframed}
 \begin{problem}
 250 kids at a frat party are randomly getting sick at a continuous
 rate of 20\% per hour, beginning at 12:00\AM .
-What are the odds that Chad vomits between 2:00\AM{ }and 3:00\AM ?
+What is the probability that Chad gets sick between 2:00\AM{ }and 3:00\AM ?
 \begin{proof}[Solution]
 Let $t=0$ at 12:00\AM .
-Then the number of kids who are not sick is given by $250e^{-.2t}$.
-This means that the number of kids who are sick is given by
+The number of kids who are not sick is given by $250e^{-.2t}$,
+and the number of kids who are sick is given by
 $250 - 250e^{-.2t}$.
 Therefore, the proportion of kids who are sick after $t$ hours is
 \[
@@ -165,15 +182,32 @@ Note that we could also have found this answer by
 finding the difference between $F(3)$ and $F(2)$,
 without using the PDF at all.
 \[
-\left(1 - e^{-.2t}\Big|_{t=3}\right) -
-\left(1 - e^{-.2t}\Big|_{t=2}\right) = .1215
+\left(1 - e^{-.2t}\right)\Big|_{t=3} -
+\left(1 - e^{-.2t}\right)\Big|_{t=2} = .1215
 \]
-The probability that Chad will vomit between 2:00\AM{} and 3:00\AM{}
-is $.1215$.
+Using either of these methods, the probability that Chad will get sick
+between 2:00\AM{} and 3:00\AM{} is $.1215$.
 \end{proof}
 \end{problem}
-\psep
+\end{mdframed}
+\subsection{General Form}
+The exponential distribution has one parameter $k$,
+where $0<k<1$. It is known as the rate parameter.
+\begin{align*}
+\tag{PDF}
+f(t) &= ke^{-kt} \\
+\tag{CDF}
+F(t) &= 1-e^{-kt}
+\end{align*}
+It can be shown that the area under the PDF is 1.
+\[
+\lim_{b\to \infty} \int_0^b ke^{-kt} =
+\lim_{b\to \infty} -e^{-kt}\bigg|_0^b =
+\lim_{b\to \infty} -e^{-k(b)} - \left(-e^{-k(0)}\right) =
+0 - (-1) = 1
+\]
 \section{The Beta Distribution}
+
 \section{The Normal Distribution}
 
 \end{document}
