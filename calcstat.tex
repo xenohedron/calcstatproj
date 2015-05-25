@@ -1,4 +1,4 @@
-\documentclass[12pt,letterpaper]{article}
+\documentclass[11pt,leqno,letterpaper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -9,15 +9,18 @@
 % \usepackage{lmodern}
 \usepackage[left=4cm,right=4cm,top=4cm,bottom=4cm]{geometry}
 \title{\Huge{The Calculus of Statistics}}
-\author{Blaise Whitesell \and Jeremiah Gelb}
-\date{\today}
+\author{\Large{Blaise Whitesell} \and \Large{Jeremiah Gelb}}
+% \date{\today}
 \begin{document}
 % Begin hack commands
 \newcommand{\bdef}[1]{\textbf{#1}} % Bold definitions
 \newcommand{\dx}{\:\mathrm{d}x} % Integral dx
 \newcommand{\dt}{\:\mathrm{d}t} % Integral dt
 \newcommand{\dth}{\:\mathrm{d}\theta} % Integral dtheta
-\theoremstyle{remark} \newtheorem{problem}{Problem}
+\newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}} % d/dt
+\theoremstyle{definition} \newtheorem{problem}{Problem}
+\newcommand{\psep}{\hrule \vspace{1 ex}} % Separator line for problems
+\newcommand{\AM}{\textsc{am}}
 % End hack commands
 \maketitle
 \vspace{2 em}
@@ -29,13 +32,13 @@ for a continuous random variable.
 \begin{itemize}
 \item The probability of any $x$ occurring is either positive or zero,
 so a PDF can never be negative.
-\begin{equation*}
+\[
 f(x) \geq 0 \quad \text{for all }x
-\end{equation*}
+\]
 \item The area under the curve must equal 1
-\begin{equation*}
+\[
 \int_a^b f(x)\dx = 1
-\end{equation*}
+\]
 where $a$ and $b$ are the lower and upper bounds,
 often $-\infty$ and $\infty$.
 \end{itemize}
@@ -45,86 +48,132 @@ the probability $F(x)$ that the outcome of a
 continuous random variable will be less than or equal to $x$.
 \begin{itemize}
 \item The CDF is related to the PDF by this integral:
-\begin{equation*}
+\[
 F(x) = \int_a^x f(t) \dt \quad \text{for } a \leq x \leq b
-\end{equation*}
+\]
 % where $F(x)$ is the CDF and $f(x)$ is the PDF.
 \item A CDF is monotonically increasing on the interval $(a,b)$.
-\begin{equation*}
+\[
 F(a) = 0 \qquad F(b) = 1
-\end{equation*}
+\]
 \end{itemize}
 \subsection{Using Calculus}
 To find the probability of an outcome in a certain range,
 one can integrate the PDF over that interval
 $(c,d)$ contained in $(a,b)$.
-\begin{equation*}
+\[
 \int_c^d f(x) \dx \quad = F(d) - F(c)
-\end{equation*}
+\]
 This gives the area under the curve, corresponding to the probability.
 \section{The Uniform Distribution}
 \subsection{Definition}
 A uniform distribution describes a continuous random variable
 where every outcome on an interval $(a,b)$ is equally likely.
-\begin{equation*}
+\[
 f(x) = \kappa
-\end{equation*}
+\]
 \subsection{Implications}
 \begin{itemize}
 \item The distribution looks like a rectangle
 with length $b-a$ and height $\kappa$
 \item Area $= 1 = \kappa (b-a)$
 % Gratuitous calculus follows:
-\begin{equation*}
+\[
 \int_a^b \frac{1}{b-a} \dx = \frac{x}{b-a}\bigg|_a^b
 = \frac{b}{b-a} - \frac{a}{b-a} = \frac{b-a}{b-a} = 1
-\end{equation*}
+\]
 \item Therefore, we have an explicit definition for $\kappa$:
-\begin{equation*}
+\[
 \kappa = \frac{1}{b-a}
-\end{equation*}
+\]
 \end{itemize}
 \subsection{PDF of a uniform distribution}
 The formal equation is piecewise.
 It depends only on the bounds $a$ and $b$.
-\begin{equation*}
+\[
 f(x)=
 \begin{cases}
 0 & \text{if } x < a,\\
 1/(b-a) & \text{if } a \leq x \leq b,\\
 0 & \text{if } x > b.
 \end{cases}
-\end{equation*}
+\]
 \subsection{CDF of a uniform distribution}
 The CDF increases linearly on the interval $(a,b)$.
-\begin{equation*}
+\[
 f(x)=
 \begin{cases}
 0 & \text{if } x < a,\\
 (x-a)/(b-a) & \text{if } a \leq x \leq b,\\
 1 & \text{if } x > b.
 \end{cases}
-\end{equation*}
-\hrule
+\]
+\psep
 \begin{problem}
+In the game ``Spin to Win'', the player spins a giant roulette wheel
+with 200 spaces. One is marked ``Win'', one is marked ``Lose'',
+and the remaining 198 are marked ``Spin Again''.
 What is the probability of losing on the first spin?
 \begin{proof}[Solution]
 There are 200 spaces,
 exactly one of which corresponds to losing immediately.
 The continuous range of values can be modeled as
 a uniform distribution from 0$^\circ$ to 360$^\circ$.
-\begin{equation*}
+\[
 1/200 \times 360^\circ = 1.8^\circ
-\end{equation*}
-\begin{equation}
+\]
+\[
 \int_0^{1.8} \frac{1}{360} \dth
 = \frac{\theta}{360} \bigg|_0^{1.8} 
 = \frac{1.8}{360} - \frac{0}{360} = 0.005
-\end{equation}
+\]
 Interestingly enough, this is equivalent to $1/200$.
 \end{proof}
 \end{problem}
-\hrule
-
+\psep
+\section{The Exponential Distribution}
+\subsection{Introduction}
+An exponential distribution can be used to model events that occur
+independently at a constant average rate.\\
+\psep
+\begin{problem}
+250 kids at a frat party are randomly getting sick at a continuous
+rate of 20\% per hour, beginning at 12:00\AM .
+What are the odds that Chad vomits between 2:00\AM{ }and 3:00\AM ?
+\begin{proof}[Solution]
+Let $t=0$ at 12:00\AM .
+Then the number of kids who are not sick is given by $250e^{-.2t}$.
+This means that the number of kids who are sick is given by
+$250 - 250e^{-.2t}$.
+Therefore, the proportion of kids who are sick after $t$ hours is
+\[
+\frac{250 - 250e^{-.2t}}{250} \quad = 1 - e^{-.2t}
+\]
+This is equivalent to the probability of being sick after $t$ hours,
+which is the CDF. To find the PDF, simply take a derivative.
+\begin{align*}
+\int_0^t f(x) \dx &= 1 - e^{-.2t}\\
+\ddt \int_0^t f(x) \dx &= \ddt (1 - e^{-.2t})\\
+f(x) &= .2e^{-.2t}
+\end{align*}
+Now that we know the PDF, we integrate it between $t=2$ and $t=3$.
+\[
+\int_2^3 .2e^{-.2t} = -e^{-.2t}\Big|_2^3 = -e^{-.6} - (-e^{-.4})
+= .1215
+\]
+Note that we could also have found this answer by
+finding the difference between $F(3)$ and $F(2)$,
+without using the PDF at all.
+\[
+\left(1 - e^{-.2t}\Big|_{t=3}\right) -
+\left(1 - e^{-.2t}\Big|_{t=2}\right) = .1215
+\]
+The probability that Chad will vomit between 2:00\AM{} and 3:00\AM{}
+is $.1215$.
+\end{proof}
+\end{problem}
+\psep
+\section{The Beta Distribution}
+\section{The Normal Distribution}
 
 \end{document}
