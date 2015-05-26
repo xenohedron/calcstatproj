@@ -32,6 +32,8 @@
 \newcommand{\dx}{\:\mathrm{d}x} % Integral dx
 \newcommand{\dt}{\:\mathrm{d}t} % Integral dt
 \newcommand{\dth}{\:\mathrm{d}\theta} % Integral dtheta
+\newcommand{\du}{\:\mathrm{d}u} % Integral du
+\newcommand{\dv}{\:\mathrm{d}v} % Integral dv
 \newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}} % d/dt
 \theoremstyle{definition} \newtheorem{problem}{Problem}
 \newcommand{\psep}{\hrule } % Separator line for problems
@@ -93,7 +95,7 @@ f(x) = \kappa
 \begin{itemize}
 \item The distribution looks like a rectangle
 with length $b-a$ and height $\kappa$
-\item Area $= 1 = \kappa (b-a)$
+\item Area $= 1 = (b-a)\cdot \kappa$
 % Gratuitous calculus follows:
 \[
 \int_a^b \frac{1}{b-a} \dx = \frac{x}{b-a}\bigg|_a^b
@@ -206,7 +208,91 @@ It can be shown that the area under the PDF is 1.
 \lim_{b\to \infty} -e^{-k(b)} - \left(-e^{-k(0)}\right) =
 0 - (-1) = 1
 \]
-\section{The Beta Distribution}
+\section{Properties of Random Variables}
+\subsection{Expected Value}
+The expected value of a random variable (also known as the mean)
+can be thought of intuitively as the long-run average of its outcomes.
+For a discrete random variable, it is the probability-weighted
+average of all possible outcomes, which may be calculated directly.
+\begin{mdframed}
+\begin{problem}
+What is the expected value for the roll of a six-sided die?
+\begin{proof}[Solution]
+The possible outcomes are 1, 2, 3, 4, 5, and 6, each occurring
+with probability $\frac{1}{6}$.
+\[
+\frac{1}{6}(1)+ \frac{1}{6}(2)+ \frac{1}{6}(3)+
+\frac{1}{6}(4)+ \frac{1}{6}(5)+ \frac{1}{6}(6) = 3.5
+\]
+\end{proof}
+\end{problem}
+\end{mdframed}
+The general formula for the expected value of a
+discrete random variable is
+\[
+\sum_{i=1}^k x_i p_i
+\]
+where $p_i$ is the probability of outcome $x_i$
+of $k$ possible outcomes.
+
+The formula for expected value can be extended to continuous
+random variables by replacing the sum with an integral.
+\[
+\int_a^b x\cdot f(x)\dx
+\]
+It follows that this is the mean of the PDF $f(x)$.
+\begin{mdframed}
+\begin{problem}
+Returning to this frat party,
+at what time can Chad expect to get sick?
+\begin{proof}[Solution]
+Use the formula for expected value of a continuous random variable.
+\begin{align*}
+\tag{Setup}
+\int_0^\infty x\cdot \left(.2e^{-.2x}\right)\dx \qquad \qquad \\
+\tag{Integrate by parts}
+u=x \quad \du = 1\dx \quad \dv = .2e^{-.2x}\dx \quad v = -e^{-.2x} \\
+\tag{Antiderivative}
+-xe^{-.2x} - \int -e^{-.2x}\dx \quad = -xe^{-.2x} -5e^{-.2x} \\
+\tag{Improper integral}
+\lim_{b\to \infty}\left(-5-x\right)\left(e^{-.2x}\right)\Big|_0^b
+\qquad = 5
+\end{align*}
+% Expand if time permits!
+Chad can expect to get sick around 5:00\AM{}.
+\end{proof}
+\end{problem}
+\end{mdframed}
+\subsection{Median}
+The median $M$ is the value of $x$ for which
+\[
+P(x\leq M) = .5 \quad \text{ and } \quad P(x\geq M) = .5
+\]
+It follows that the median is an M such that
+\[
+\int_a^M f(x) \dx = \frac{1}{2}
+\]
+\begin{mdframed}
+\begin{problem}
+At what time are half the kids at the frat party sick?
+\begin{proof}[Solution]
+Solve for the upper bound fo the integral using
+the Fundamental Theorem of Calculus.
+\begin{align*}
+\int_0^M .2e^{-.2t}\dt &= 0.5 \\
+-e^{-.2t}\Big|_0^M &= 0.5 \\
+-e^{-.2M}-\left(-e^{-2(0)}\right) &= 0.5 \\
+-e^{-.2M} +1 &= 0.5 \\
+e^{-.2M} &= 0.5 \\
+-.2M &= \ln 0.5 \\
+M &= 3.4657
+\end{align*}
+Half the kids at the party will be sick by 3:28\AM{}.
+\end{proof}
+\end{problem}
+\end{mdframed}
+\subsection{Variance}
+
 
 \section{The Normal Distribution}
 
