@@ -3,7 +3,7 @@
 % Ideas by Jeremiah Gelb
 % LaTeX typesetting by Blaise Whitesell
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath}
+\usepackage[intlimits]{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
@@ -34,7 +34,8 @@
 \newcommand{\dth}{\:\mathrm{d}\theta} % Integral dtheta
 \newcommand{\du}{\:\mathrm{d}u} % Integral du
 \newcommand{\dv}{\:\mathrm{d}v} % Integral dv
-\newcommand{\ddt}{\frac{\mathrm{d}}{\mathrm{d}t}} % d/dt
+\newcommand{\dr}{\:\mathrm{d}r} % Integral dr
+\newcommand{\deriv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
 \theoremstyle{definition} \newtheorem{problem}{Problem}
 \newcommand{\psep}{\hrule } % Separator line for problems
 \newcommand{\AM}{\textsc{am}}
@@ -172,7 +173,7 @@ This is equivalent to the probability of being sick after $t$ hours,
 which is the CDF. To find the PDF, simply take a derivative.
 \begin{align*}
 \int_0^t f(x) \dx &= 1 - e^{-.2t}\\
-\ddt \int_0^t f(x) \dx &= \ddt (1 - e^{-.2t})\\
+\deriv{}{t} \int_0^t f(x) \dx &= \deriv{}{t} (1 - e^{-.2t})\\
 f(x) &= .2e^{-.2t}
 \end{align*}
 Now that we know the PDF, we integrate it between $t=2$ and $t=3$.
@@ -238,7 +239,7 @@ of $k$ possible outcomes.
 The formula for expected value can be extended to continuous
 random variables by replacing the sum with an integral.
 \[
-\int_a^b x\cdot f(x)\dx
+\mu = \int_a^b x\cdot f(x)\dx
 \]
 It follows that this is the mean of the PDF $f(x)$.
 \begin{mdframed}
@@ -276,7 +277,7 @@ It follows that the median is an M such that
 \begin{problem}
 At what time are half the kids at the frat party sick?
 \begin{proof}[Solution]
-Solve for the upper bound fo the integral using
+Solve for the upper bound for the integral using
 the Fundamental Theorem of Calculus.
 \begin{align*}
 \int_0^M .2e^{-.2t}\dt &= 0.5 \\
@@ -292,8 +293,118 @@ Half the kids at the party will be sick by 3:28\AM{}.
 \end{problem}
 \end{mdframed}
 \subsection{Variance}
+Variance is a measure of the spread of a distribution.
+It is used to describe the average distance of an outcome
+from the expected value.
 
+A naive method of calculating variance would be
+\[
+\tag{Spurious}
+\int_a^b (x - \mu ) f(x) \dx
+\]
+The problem with this method is that negative and positive values of
+$(x- \mu)$ cancel each other out. Instead we can compute
+\[
+\tag{Absolute deviation}
+\int_a^b \left| x - \mu \right| f(x) \dx \\
+\]
+\[
+\tag{Variance}
+{\text{Var}(x)} = \int_a^b {(x - \mu )}^2 f(x) \dx
+\]
+The second method, in which the term $(x- \mu)$ is squared,
+is preferred for reasons which are beyond the scope of this text.
+Note that squaring the values gives a greater weight to outcomes
+that are further from the expected value.
 
+The square root of the variance is known as the
+\bdef{standard deviation}.
+\[
+\tag{Wow!}
+\sqrt{\text{Var}(x)} = \sigma
+\]
+\begin{mdframed}
+\begin{problem}
+Find the standard deviation of the time
+someone at this frat party gets sick.
+\begin{proof}[Solution]
+Solve for the variance using the formula.
+\begin{align*}
+\int_0^M .2e^{-.2t}\dt &= 0.5 \\
+-e^{-.2t}\Big|_0^M &= 0.5 \\
+-e^{-.2M}-\left(-e^{-2(0)}\right) &= 0.5 \\
+-e^{-.2M} +1 &= 0.5 \\
+e^{-.2M} &= 0.5 \\
+-.2M &= \ln 0.5 \\
+M &= 3.4657
+\end{align*}
+Half the kids at the party will be sick by 3:28\AM{}.
+% FIX THIS!!!!!!!!!!!!!
+\end{proof}
+\end{problem}
+\end{mdframed}
 \section{The Normal Distribution}
+\subsection{Description}
+A Normal distribution is a bell-shaped curve
+with special properties that are useful in statistics.
+It is a continuous distribution over the set of real numbers
+described by two parameters $\mu$ and $\sigma$, which
+correspond to its mean and standard deviation.
+\[
+\tag{PDF}
+f(x) = 
+N(x,\mu ,\sigma) = \frac{1}{\sigma \sqrt{2 \pi}} \cdot
+e^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^2}
+\]
+\begin{proof}
+The area $Q$ under a Normal PDF is unity.
+\[
+\tag*{Show that}
+Q = 1 =
+\int_{-\infty}^{\infty} \frac{1}{\sigma \sqrt{2 \pi}} \cdot
+e^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^2} \dx
+\]
+\[
+\tag*{Let}
+u=\frac{x-\mu}{\sigma} \qquad
+\du = \frac{\!\dx}{\sigma} \qquad \dx = \sigma \du
+\]
+\begin{align*}
+Q &= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \cdot
+e^{-\frac{1}{2}u^2} \du \\
+Q^2 &= \int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \cdot
+e^{-\frac{1}{2}u^2} \du \cdot
+\int_{-\infty}^{\infty} \frac{1}{\sqrt{2\pi}} \cdot
+e^{-\frac{1}{2}v^2} \dv \\
+Q^2 &= \frac{1}{2\pi} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty}
+e^{-\frac{1}{2}\left(u^2 + v^2 \right)} \du \dv
+\end{align*}
+\begin{align*}
+\tag*{Convert to polar form}
+u = r \cos \theta \qquad v = r \sin \theta \qquad
+u^2+v^2=r^2 \\
+\tag*{Jacobian}
+\begin{vmatrix}
+\deriv{u}{r}&\deriv{u}{\theta}\\
+\deriv{v}{r}&\deriv{v}{\theta}
+\end{vmatrix} =
+\begin{vmatrix}
+\cos \theta & r \sin \theta \\
+\sin \theta & r \cos \theta
+\end{vmatrix} =
+\left|-r\sin^2\theta-r\cos^2\theta\right| = r
+\end{align*}
+\begin{align*}
+Q^2 &= \frac{1}{2\pi} \int_{0}^{2\pi} \int_{0}^{\infty}
+e^{-\frac{1}{2}r^2} r \dr \dth \\
+\tag*{Separate and cancel}
+Q^2 &= \frac{1}{2\pi} \int_{0}^{2\pi} \dth \cdot
+\int_{0}^{\infty} e^{-\frac{1}{2}r^2} r \dr \\
+\tag*{$t=r^2 \qquad \dt= 2r \dr$}
+Q^2 &= \int_{0}^{\infty} \frac{1}{2} e^{-\frac{1}{2}t} \dt \\
+Q^2 &= \lim_{b\to \infty} \left(-e^{-\frac{1}{2}t}\right)\Big|_0^b \\
+Q^2 &= 1 \\ Q&=1 \qedhere
+\end{align*}
+\end{proof}
 
 \end{document}
