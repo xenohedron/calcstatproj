@@ -9,9 +9,13 @@
 \usepackage{amsthm}
 \usepackage{mdframed}
 % \usepackage{textcomp}
+\usepackage{booktabs}
+\usepackage{xparse}
+\usepackage{tikz}
+\usetikzlibrary{calc}
 % \usepackage{graphicx}
 % \usepackage{lmodern}
-\usepackage[left=4cm,right=4cm,top=4cm,bottom=4cm]{geometry}
+\usepackage[left=4cm,right=4cm,top=3.5cm,bottom=3.5cm]{geometry}
 % Packages loaded
 \title{\Huge{The Calculus of Statistics}}
 \author{\Large{Blaise Whitesell} \and \Large{Jeremiah Gelb}}
@@ -35,10 +39,25 @@
 \newcommand{\du}{\:\mathrm{d}u} % Integral du
 \newcommand{\dv}{\:\mathrm{d}v} % Integral dv
 \newcommand{\dr}{\:\mathrm{d}r} % Integral dr
-\newcommand{\deriv}[2]{\frac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\deriv}[2]{\dfrac{\mathrm{d}#1}{\mathrm{d}#2}}
+\newcommand{\derivp}[2]{\dfrac{\partial \;\! #1}{\partial \;\! #2}}
 \theoremstyle{definition} \newtheorem{problem}{Problem}
-\newcommand{\psep}{\hrule } % Separator line for problems
 \newcommand{\AM}{\textsc{am}}
+% Tikz for tabular integration
+\tikzset{Arrow Style/.style={text=black, font=\boldmath}}
+\newcommand{\tikzmark}[1]{%
+\tikz[overlay, remember picture, baseline] \node (#1) {};%
+}
+\newcommand*{\XShift}{0.5em}
+\newcommand*{\YShift}{0.5ex}
+\NewDocumentCommand{\DrawArrow}{s O{} m m m}{%
+\begin{tikzpicture}[overlay,remember picture]
+\draw[->, thick, Arrow Style, #2] 
+($(#3.west)+(\XShift,\YShift)$) -- 
+($(#4.east)+(-\XShift,\YShift)$)
+node [midway,above] {#5};
+\end{tikzpicture}%
+}
 % End hack commands
 \maketitle
 \thispagestyle{fancy}
@@ -54,7 +73,7 @@ so a PDF can never be negative.
 \[
 f(x) \geq 0 \quad \text{for all }x.
 \]
-\item The area under the curve must equal 1
+\item The area under the curve must equal unity
 \[
 \int_a^b f(x)\dx = 1
 \]
@@ -193,6 +212,7 @@ between 2:00\AM{} and 3:00\AM{} is $.1215$.
 \end{proof}
 \end{problem}
 \end{mdframed}
+
 \subsection{General Form}
 The exponential distribution has one parameter $k$,
 where $0<k<1$. It is known as the rate parameter.
@@ -209,12 +229,14 @@ It can be shown that the area under the PDF is 1.
 \lim_{b\to \infty} -e^{-k(b)} - \left(-e^{-k(0)}\right) =
 0 - (-1) = 1
 \]
+
 \section{Properties of Random Variables}
 \subsection{Expected Value}
 The expected value of a random variable (also known as the mean)
 can be thought of intuitively as the long-run average of its outcomes.
 For a discrete random variable, it is the probability-weighted
 average of all possible outcomes, which may be calculated directly.
+
 \begin{mdframed}
 \begin{problem}
 What is the expected value for the roll of a six-sided die?
@@ -228,6 +250,7 @@ with probability $\frac{1}{6}$.
 \end{proof}
 \end{problem}
 \end{mdframed}
+
 The general formula for the expected value of a
 discrete random variable is
 \[
@@ -242,20 +265,20 @@ random variables by replacing the sum with an integral.
 \mu = \int_a^b x\cdot f(x)\dx
 \]
 It follows that this is the mean of the PDF $f(x)$.
+
 \begin{mdframed}
 \begin{problem}
-Returning to this frat party,
-at what time can Chad expect to get sick?
+During the frat party, when can Chad expect to get sick?
 \begin{proof}[Solution]
 Use the formula for expected value of a continuous random variable.
 \begin{align*}
-\tag{Setup}
+\tag*{Setup}
 \int_0^\infty x\cdot \left(.2e^{-.2x}\right)\dx \qquad \qquad \\
-\tag{Integrate by parts}
+\tag*{Integrate by parts}
 u=x \quad \du = 1\dx \quad \dv = .2e^{-.2x}\dx \quad v = -e^{-.2x} \\
-\tag{Antiderivative}
+\tag*{Antiderivative}
 -xe^{-.2x} - \int -e^{-.2x}\dx \quad = -xe^{-.2x} -5e^{-.2x} \\
-\tag{Improper integral}
+\tag*{Improper integral}
 \lim_{b\to \infty}\left(-5-x\right)\left(e^{-.2x}\right)\Big|_0^b
 \qquad = 5
 \end{align*}
@@ -304,14 +327,12 @@ A naive method of calculating variance would be
 \]
 The problem with this method is that negative and positive values of
 $(x- \mu)$ cancel each other out. Instead we can compute
-\[
-\tag{Absolute deviation}
-\int_a^b \left| x - \mu \right| f(x) \dx \\
-\]
-\[
-\tag{Variance}
-{\text{Var}(x)} = \int_a^b {(x - \mu )}^2 f(x) \dx
-\]
+\begin{align*}
+\text{Absolute deviation} &=
+\int_a^b \big| x - \mu \big| f(x) \dx \\
+\tag*{or}
+\text{Variance} = \text{Var}(x) &= \int_a^b {(x - \mu )}^2 f(x) \dx
+\end{align*}
 The second method, in which the term $(x- \mu)$ is squared,
 is preferred for reasons which are beyond the scope of this text.
 Note that squaring the values gives a greater weight to outcomes
@@ -323,22 +344,45 @@ The square root of the variance is known as the
 \tag{Wow!}
 \sqrt{\text{Var}(x)} = \sigma
 \]
+
 \begin{mdframed}
 \begin{problem}
 Find the standard deviation of the time
 someone at this frat party gets sick.
 \begin{proof}[Solution]
 Solve for the variance using the formula.
+\[
+\int_0^{\infty} \left( t-5 \right)^2 \cdot
+\left( .2e^{-.2t} \right) \dt
+\]
+% Begin tabular integration
+\[
+{\renewcommand{\arraystretch}{1.5}
+\begin{array}{rc @{\hspace*{5 em}} cr}\toprule
+u &&& \dv \\\cmidrule{1-4}
+t^2-10t+25 &\tikzmark{Left 1} & \tikzmark{Right 1}&.2e^{-.2t} \\
+2t-10 &\tikzmark{Left 2} & \tikzmark{Right 2}&-e^{-.2t} \\      
+2 &\tikzmark{Left 3} & \tikzmark{Right 3}&5e^{-.2t} \\      
+0 &\tikzmark{Left 4} & \tikzmark{Right 4}&-25e^{-.2t} \\
+\bottomrule
+\end{array}}
+\]
+\DrawArrow{Left 1}{Right 2}{$+$}%
+\DrawArrow{Left 2}{Right 3}{$-$}%
+\DrawArrow{Left 3}{Right 4}{$+$}%
+% End tabular integration
 \begin{align*}
-\int_0^M .2e^{-.2t}\dt &= 0.5 \\
--e^{-.2t}\Big|_0^M &= 0.5 \\
--e^{-.2M}-\left(-e^{-2(0)}\right) &= 0.5 \\
--e^{-.2M} +1 &= 0.5 \\
-e^{-.2M} &= 0.5 \\
--.2M &= \ln 0.5 \\
-M &= 3.4657
+\lim_{b\to \infty}
+\left( t^2-10t+25 \right) \left( -e^{-.2t} \right)
+- \left( 2t-10 \right) \left( 5e^{-.2t} \right)
++ \left( 2 \right) \left( -25e^{-.2t} \right)
+\bigg|_0^b \\
+e^{-.2(0)} \Big(
+25(-1) - (-10)(5) +2(-25) \Big) =25 \\
+\tag*{Standard deviation is the square root of variance}
+\sqrt{25}= 5
 \end{align*}
-Half the kids at the party will be sick by 3:28\AM{}.
+The standard deviation is 5 hours.
 % FIX THIS!!!!!!!!!!!!!
 \end{proof}
 \end{problem}
@@ -385,26 +429,27 @@ u = r \cos \theta \qquad v = r \sin \theta \qquad
 u^2+v^2=r^2 \\
 \tag*{Jacobian}
 \begin{vmatrix}
-\deriv{u}{r}&\deriv{u}{\theta}\\
-\deriv{v}{r}&\deriv{v}{\theta}
+\derivp{u}{r}&\derivp{u}{\theta}\\ \\
+\derivp{v}{r}&\derivp{v}{\theta}
 \end{vmatrix} =
 \begin{vmatrix}
-\cos \theta & r \sin \theta \\
+\cos \theta & -r \sin \theta \\
 \sin \theta & r \cos \theta
 \end{vmatrix} =
-\left|-r\sin^2\theta-r\cos^2\theta\right| = r
+\left|r\cos^2\theta+r\sin^2\theta\right| = r
 \end{align*}
 \begin{align*}
 Q^2 &= \frac{1}{2\pi} \int_{0}^{2\pi} \int_{0}^{\infty}
-e^{-\frac{1}{2}r^2} r \dr \dth \\
+e^{-\frac{1}{2}r^2} \, r \dr \dth \\
 \tag*{Separate and cancel}
 Q^2 &= \frac{1}{2\pi} \int_{0}^{2\pi} \dth \cdot
-\int_{0}^{\infty} e^{-\frac{1}{2}r^2} r \dr \\
+\int_{0}^{\infty} e^{-\frac{1}{2}r^2} \, r \dr \\
 \tag*{$t=r^2 \qquad \dt= 2r \dr$}
 Q^2 &= \int_{0}^{\infty} \frac{1}{2} e^{-\frac{1}{2}t} \dt \\
 Q^2 &= \lim_{b\to \infty} \left(-e^{-\frac{1}{2}t}\right)\Big|_0^b \\
-Q^2 &= 1 \\ Q&=1 \qedhere
+Q^2 &= 1 \\
+\tag*{$\therefore$}
+Q&=1
 \end{align*}
 \end{proof}
-
 \end{document}
